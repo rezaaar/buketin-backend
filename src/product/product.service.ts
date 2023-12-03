@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { IProduct } from 'src/interface/product.interface';
 import { CreateProductDto } from 'src/dto/create-product.dto';
-import { UpdateProductDto } from 'src/dto/update-student.dto';
+import { UpdateProductDto } from 'src/dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
