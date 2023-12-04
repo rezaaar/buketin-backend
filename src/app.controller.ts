@@ -11,6 +11,8 @@ import {
 import { AppService } from './app.service';
 import { FilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { CustomUploadFileTypeValidator } from './app.validator';
+import { diskStorage } from 'multer';
+import { join } from 'path';
 
 const MAX_SIZE_IN_BYTES = 5 * 1024 * 1024;
 const VALID_UPLOADS_MIME_TYPES = [
@@ -24,22 +26,38 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('upload/one')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: join('public/images'),
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
   public async uploadOneFile(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addValidator(
-          new CustomUploadFileTypeValidator({
-            fileType: VALID_UPLOADS_MIME_TYPES,
-          }),
-        )
-        .addMaxSizeValidator({ maxSize: MAX_SIZE_IN_BYTES })
-        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
-    )
+    @UploadedFile()
     file: Express.Multer.File,
   ) {
     return file;
   }
+
+  // public async uploadOneFile(
+  //   @UploadedFile(
+  //     new ParseFilePipeBuilder()
+  //       .addValidator(
+  //         new CustomUploadFileTypeValidator({
+  //           fileType: VALID_UPLOADS_MIME_TYPES,
+  //         }),
+  //       )
+  //       .addMaxSizeValidator({ maxSize: MAX_SIZE_IN_BYTES })
+  //       .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
+  //   )
+  //   file: Express.Multer.File,
+  // ) {
+  //   return file;
+  // }
 
   @Post('upload/many')
   @UseInterceptors(FilesInterceptor('files'))

@@ -34,7 +34,11 @@ export class ProductService {
   }
 
   async getAllProducts(): Promise<IProduct[]> {
-    const productData = await this.productModel.find().exec();
+    const productData = await this.productModel
+      .find()
+      .populate('category')
+      .populate('occasion')
+      .exec();
 
     if (!productData || productData.length == 0) {
       throw new NotFoundException('Student data not founds!');
@@ -56,7 +60,7 @@ export class ProductService {
     const deletedProduct = await this.productModel.findById(productId);
 
     if (!deletedProduct) {
-      throw new NotFoundException(`Student #${productId} not found`);
+      throw new NotFoundException(`Product #${productId} not found`);
     }
 
     await deletedProduct.deleteOne();
