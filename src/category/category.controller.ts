@@ -100,7 +100,7 @@ export class CategoryController {
     }
   }
 
-  @Delete()
+  @Delete('/:id')
   async deleteCategory(@Res() response, @Param('id') CategoryId: string) {
     try {
       const deletedCategory =
