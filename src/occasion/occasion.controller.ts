@@ -100,7 +100,7 @@ export class OccasionController {
     }
   }
 
-  @Delete()
+  @Delete('/:id')
   async deleteOccasion(@Res() response, @Param('id') occasionId: string) {
     try {
       const deletedOccasion =
