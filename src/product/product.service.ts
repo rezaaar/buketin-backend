@@ -11,6 +11,8 @@ export class ProductService {
 
   async createProduct(createProductDto: CreateProductDto): Promise<IProduct> {
     const newProduct = await new this.productModel(createProductDto);
+    newProduct.populate('occasion');
+    newProduct.populate('category');
     return newProduct.save();
   }
 
@@ -47,13 +49,32 @@ export class ProductService {
   }
 
   async getProduct(productId: string): Promise<IProduct> {
-    const existingProduct = await this.productModel.findById(productId).exec();
+    const existingProduct = await (await this.productModel.findById(productId))
+      .populated('category')
+      .populate('occasion')
+      .exec();
 
     if (!existingProduct) {
       throw new NotFoundException(`Product #${productId} not found`);
     }
 
     return existingProduct;
+  }
+
+  async filterProduct(
+    categoryId: string,
+    occasionId: string[],
+  ): Promise<IProduct[]> {
+    const productData = await this.productModel
+      .find({ category: categoryId, occasion: { $all: occasionId } })
+      .populate('category')
+      .populate('occasion')
+      .exec();
+
+    if (!productData || productData.length == 0) {
+      throw new NotFoundException('Student data not founds!');
+    }
+    return productData;
   }
 
   async deleteProduct(productId: string): Promise<IProduct> {

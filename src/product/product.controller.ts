@@ -8,6 +8,7 @@ import {
   Put,
   Get,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CreateProductDto } from 'src/dto/create-product.dto';
 import { UpdateProductDto } from 'src/dto/update-product.dto';
@@ -71,6 +72,31 @@ export class ProductController {
 
       return response.status(HttpStatus.OK).json({
         message: 'All products found',
+        productData,
+      });
+    } catch (error) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        message: 'Error: Product not found!',
+        error: 'Bad Request',
+      });
+    }
+  }
+
+  @Get('/filter')
+  async getFilteredProduct(
+    @Res() response,
+    @Query('category') categoryId: string,
+    @Query('occasion') occasionsId: string[],
+  ) {
+    try {
+      const productData = await this.productService.filterProduct(
+        categoryId,
+        occasionsId,
+      );
+
+      return response.status(HttpStatus.OK).json({
+        message: 'Filtered products found',
         productData,
       });
     } catch (error) {
