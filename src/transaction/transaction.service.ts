@@ -33,6 +33,52 @@ export class TransactionService {
     return transactionData;
   }
 
+  async getTransaction(transactionId: string): Promise<ITransaction> {
+    const existingTransaction = await this.transactionModel
+      .findById(transactionId)
+      .populate('greeting_card_id')
+      .populate('item')
+      .exec();
+
+    if (!existingTransaction) {
+      throw new NotFoundException(`Transaction #${transactionId} not found`);
+    }
+
+    return existingTransaction;
+  }
+
+  async getStatistic() {
+    const statisticData = await this.transactionModel.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return statisticData;
+  }
+
+  async claimTransaction(
+    transactionId: string,
+    receiverData: object,
+  ): Promise<ITransaction> {
+    const existingTransaction = await this.transactionModel.findByIdAndUpdate(
+      transactionId,
+      { receiver: receiverData, status: 'proses' },
+      {
+        new: true,
+      },
+    );
+
+    if (!existingTransaction) {
+      throw new NotFoundException(`Transaction not found`);
+    }
+
+    return existingTransaction;
+  }
+
   async updateStatus(
     transactionId: string,
     statusUpdate: string,

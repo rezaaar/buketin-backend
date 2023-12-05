@@ -24,6 +24,15 @@ export class Transaction {
   buyer_address: string;
 
   @Prop()
+  receiver_name: string;
+
+  @Prop()
+  receiver_address: string;
+
+  @Prop()
+  receiver_wa: string;
+
+  @Prop()
   status: string;
 }
 

@@ -56,6 +56,67 @@ export class TransactionController {
     }
   }
 
+  @Get('/statistic')
+  async getStatistic(@Res() response) {
+    try {
+      const statisticData = await this.transactionService.getStatistic();
+
+      return response.status(HttpStatus.OK).json({
+        message: 'Statistic data has been successfully retrieved',
+        statisticData,
+      });
+    } catch (error) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        message: 'Error: Statistic data not retrieved!',
+        error: error,
+      });
+    }
+  }
+
+  @Get('/:id')
+  async getTransaction(@Res() response, @Param('id') id: string) {
+    try {
+      const transactionData = await this.transactionService.getTransaction(id);
+
+      return response.status(HttpStatus.OK).json({
+        message: 'Transaction data has been successfully retrieved',
+        transactionData,
+      });
+    } catch (error) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        message: 'Error: Transaction data not retrieved!',
+        error: error,
+      });
+    }
+  }
+
+  @Put('/claim/:id')
+  async claimTransaction(
+    @Res() response,
+    @Param('id') id: string,
+    @Body() receiver_data: object,
+  ) {
+    try {
+      const transactionData = await this.transactionService.claimTransaction(
+        id,
+        receiver_data,
+      );
+
+      return response.status(HttpStatus.OK).json({
+        message: 'Receiver data on Transaction has been successfully updated',
+        transactionData,
+      });
+    } catch (error) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        message: 'Error: Transaction data not updated!',
+        error: error,
+      });
+    }
+  }
+
   @Put('/:id')
   async updateStatus(
     @Res() response,

@@ -25,6 +25,15 @@ export class CreateTransactionDto {
   @IsString()
   readonly buyer_address: string;
 
+  @IsString()
+  readonly receiver_name: string;
+
+  @IsString()
+  readonly receiver_address: string;
+
+  @IsString()
+  readonly receiver_wa: string;
+
   @IsNotEmpty()
   @IsString()
   readonly status: string;
