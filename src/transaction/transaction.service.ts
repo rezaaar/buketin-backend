@@ -24,7 +24,7 @@ export class TransactionService {
     const transactionData = await this.transactionModel
       .find()
       .populate('greeting_card_id')
-      .populate('product')
+      .populate('item')
       .exec();
 
     if (!transactionData || transactionData.length == 0) {

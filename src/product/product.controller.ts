@@ -121,7 +121,7 @@ export class ProductController {
       return response.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 400,
         message: 'Error: Product not found!',
-        error: 'Bad Request',
+        error: error,
       });
     }
   }

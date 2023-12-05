@@ -51,7 +51,7 @@ export class TransactionController {
       return response.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 400,
         message: 'Error: Transaction data not retrieved!',
-        error: 'Bad Request',
+        error: error,
       });
     }
   }

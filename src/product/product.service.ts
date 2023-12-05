@@ -49,8 +49,9 @@ export class ProductService {
   }
 
   async getProduct(productId: string): Promise<IProduct> {
-    const existingProduct = await (await this.productModel.findById(productId))
-      .populated('category')
+    const existingProduct = await this.productModel
+      .findById(productId)
+      .populate('category')
       .populate('occasion')
       .exec();
 
