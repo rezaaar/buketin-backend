@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateTransactionDto } from 'src/dto/transaction/create-transaction.dto';
 import { ITransaction } from 'src/interface/transaction.interface';
+import { UpdateReceiverTransactionDto } from 'src/dto/transaction/update-receiver-transaction.dto';
 
 @Injectable()
 export class TransactionService {
@@ -62,11 +63,11 @@ export class TransactionService {
 
   async claimTransaction(
     transactionId: string,
-    receiverData: object,
+    updateReceiverTransactionDto: UpdateReceiverTransactionDto,
   ): Promise<ITransaction> {
     const existingTransaction = await this.transactionModel.findByIdAndUpdate(
       transactionId,
-      { receiver: receiverData, status: 'proses gift' },
+      updateReceiverTransactionDto,
       {
         new: true,
       },

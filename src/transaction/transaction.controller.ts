@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateTransactionDto } from 'src/dto/transaction/create-transaction.dto';
 import { TransactionService } from './transaction.service';
+import { UpdateReceiverTransactionDto } from 'src/dto/transaction/update-receiver-transaction.dto';
 
 @Controller('transaction')
 export class TransactionController {
@@ -96,12 +97,12 @@ export class TransactionController {
   async claimTransaction(
     @Res() response,
     @Param('id') id: string,
-    @Body() receiver_data: object,
+    @Body() updateReceiverTransactionDto: UpdateReceiverTransactionDto,
   ) {
     try {
       const transactionData = await this.transactionService.claimTransaction(
         id,
-        receiver_data,
+        updateReceiverTransactionDto,
       );
 
       return response.status(HttpStatus.OK).json({
