@@ -66,7 +66,7 @@ export class TransactionService {
   ): Promise<ITransaction> {
     const existingTransaction = await this.transactionModel.findByIdAndUpdate(
       transactionId,
-      { receiver: receiverData, status: 'proses' },
+      { receiver: receiverData, status: 'proses gift' },
       {
         new: true,
       },
